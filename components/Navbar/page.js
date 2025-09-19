@@ -1,12 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const router = useRouter();
+
   const pathname = usePathname();
 
   const navItems = [
@@ -19,9 +19,6 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const isActiveRoute = (href) => {
-    return router.pathname === href;
-  };
 
   return (
     <nav className="sticky top-0 z-50 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-lg">
@@ -58,6 +55,8 @@ const Navbar = () => {
           <button
             onClick={toggleMenu}
             className="md:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1.5 focus:outline-none"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMenuOpen}
           >
             <span 
               className={`w-6 h-0.5 bg-white rounded-full transition-all duration-300 ${
@@ -74,8 +73,7 @@ const Navbar = () => {
                 isMenuOpen ? '-rotate-45 -translate-y-2' : ''
               }`}
             />
-          </button>
-        </div>
+          </button>        </div>
 
         {/* Mobile Navigation */}
         <div className={`
