@@ -12,7 +12,10 @@ const SignupForm = () => {
         },
         validationSchema: Yup.object({
             email: Yup.string().email('Invalid email address').required('Required'),
-            password: Yup.string().required('Required'),
+            password: Yup.string()
+                .min(8, 'Password must be at least 8 characters')
+                .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Password must contain at least one uppercase letter, one lowercase letter, and one number')
+                .required('Required'),
             confirmPassword: Yup.string()
                 .oneOf([Yup.ref('password'), null], 'Passwords must match')
                 .required('Required'),
