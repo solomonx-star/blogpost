@@ -3,6 +3,8 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
+import { login } from '@/api/auth';
+
 const LoginForm = () => {
     const formik = useFormik({
         initialValues: {
@@ -13,8 +15,13 @@ const LoginForm = () => {
             email: Yup.string().email('Invalid email address').required('Required'),
             password: Yup.string().required('Required'),
         }),
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit: async (values) => {
+            try {
+                await login(values.email, values.password);
+                alert('Login successful');
+            } catch (error) {
+                alert('Login failed');
+            }
         },
     });
 

@@ -3,6 +3,8 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
+import { signup } from '@/api/auth';
+
 const SignupForm = () => {
     const formik = useFormik({
         initialValues: {
@@ -20,8 +22,13 @@ const SignupForm = () => {
                 .oneOf([Yup.ref('password'), null], 'Passwords must match')
                 .required('Required'),
         }),
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit: async (values) => {
+            try {
+                await signup(values.email, values.password);
+                alert('Signup successful');
+            } catch (error) {
+                alert('Signup failed');
+            }
         },
     });
 
