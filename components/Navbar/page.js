@@ -22,18 +22,18 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-lg">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link 
             href="/" 
-            className="text-white text-2xl font-bold tracking-tight hover:scale-105 transition-transform duration-300"
+            className="text-white flex-1 text-2xl font-bold tracking-tight hover:scale-105 transition-transform duration-300"
           >
             BlogSite
           </Link>
           
           {/* Desktop Navigation */}
-          <ul className="hidden md:flex space-x-8 items-center">
+          <ul className="hidden md:flex flex-1 justify-end space-x-8 items-center">
             {navItems.map((item) => (
               <li key={item.name}>
                 <Link 
