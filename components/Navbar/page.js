@@ -27,7 +27,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link 
             href="/" 
-            className="text-white flex-1 text-2xl font-bold tracking-tight hover:scale-105 transition-transform duration-300"
+            className="text-white md:flex-1 text-2xl font-bold tracking-tight hover:scale-105 transition-transform duration-300"
           >
             BlogSite
           </Link>

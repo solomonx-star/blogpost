@@ -60,7 +60,7 @@ export default function Home() {
 
     return (
         <main className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-400 to-purple-300 py-10 px-4">
-            <div className="max-w-8xl mx-8 pt-10 ">
+            <div className="max-w-8xl md:mx-8 pt-10 ">
                 <h1 className="text-4xl font-bold text-center text-gray-200 mb-8">Welcome to BlogPost</h1>
                 <p className="text-center text-gray-300 mb-12">Explore the latest posts from our amazing community and beyond</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
