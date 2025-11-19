@@ -74,7 +74,7 @@ export default function Home() {
     const closeModal = () => setSelectedPost(null);
 
     return (
-        <main className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-400 to-purple-300 py-10 px-4">
+        <main className="min-h-screen bg-linear-to-br from-blue-950 via-blue-400 to-purple-300 py-10 px-4">
             <div className="max-w-8xl md:mx-8 pt-10 ">
                 <h1 className="text-4xl font-bold text-center text-gray-200 mb-8">Welcome to BlogPost</h1>
                 <p className="text-center text-gray-300 mb-12">Explore the latest posts from our amazing community and beyond</p>
@@ -108,7 +108,7 @@ export default function Home() {
 
             {/* Modal */}
             {selectedPost && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-950 via-blue-400 to-purple-300 bg-opacity-90">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-linear-to-br from-blue-950 via-blue-400 to-purple-300 bg-opacity-90">
                     <div className="bg-white rounded-xl shadow-2xl p-8 w-[50%]  relative">
                         <button 
                             className="absolute top-3 right-3 text-gray-400 hover:text-purple-700 text-2xl font-bold" 
