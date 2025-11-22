@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     user: null,
     token: null,
   });
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   // Function to handle login
@@ -36,26 +36,26 @@ export const AuthProvider = ({ children }) => {
 
     Cookies.set("authToken", token, cookieOptions);
     Cookies.set("_id", user._id, cookieOptions);
-    Cookies.set("user", JSON.stringify(user), { expires: 2, secure: false });
+    Cookies.set("user", JSON.stringify(user), cookieOptions);
 
     router.push("/Home");
   };
 
   // Function to handle logout
-const logout = () => {
-  setAuthState({ isAuthenticated: false, user: null, token: null });
-  
-  const cookieOptions = {
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax'
+  const logout = () => {
+    setAuthState({ isAuthenticated: false, user: null, token: null });
+
+    const cookieOptions = {
+      path: "/",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    };
+
+    Cookies.remove("authToken", cookieOptions);
+    Cookies.remove("_id", cookieOptions);
+    Cookies.remove("user", cookieOptions);
+    router.push("/Home");
   };
-  
-  Cookies.remove("authToken", cookieOptions);
-  Cookies.remove("_id", cookieOptions);
-  Cookies.remove("user", cookieOptions);
-  
-  router.push("/Home");
-};
 
   // Initialize authentication on app load
   useEffect(() => {
@@ -65,16 +65,14 @@ const logout = () => {
     const fetchUser = async () => {
       if (!token || !userId) {
         setLoading(false);
-        console.error("No token or user ID found in cookies");
-        // logout(); // Logout if token or user ID is missing
         return;
       }
 
       try {
         // Fetch user data
-        const response = await getProfile(userId);
+        // const response = await getProfile(userId);
 
-        console.log("User Profile: ", response);
+
 
         // Update authentication state
         setAuthState({
@@ -84,39 +82,39 @@ const logout = () => {
         });
       } catch (err) {
         console.error("Error fetching user:", err);
+
+        const userCookie = Cookies.get("user");
+        if (userCookie) {
+          try {
+            const user = JSON.parse(userCookie);
+            setAuthState({
+              isAuthenticated: true,
+              user,
+              token,
+              loading: false,
+            });
+            return;
+          } catch (parseErr) {
+            console.error("Failed to parse user cookie", parseErr);
+          }
+        }
+        setAuthState({ isAuthenticated: false, user: null, token: null });
+
         if (err.response?.status === 401 || err.response?.status === 403) {
           logout();
         }
-
-        const userCookie = Cookies.get("user");
-                if (userCookie) {
-                  try {
-                    const user = JSON.parse(userCookie);
-                    setAuthState({
-                      isAuthenticated: true,
-                      user,
-                      token,
-                      loading: false,
-                    });
-                    return;
-                  } catch (parseErr) {
-                    console.error("Failed to parse user cookie", parseErr);
-                  }
-                }
-                setAuthState({ isAuthenticated: false, user: null, token: null});
-        // logout();
       } finally {
         setLoading(false);
       }
     };
 
     fetchUser();
-    console.log(authState.user)
+
   }, []); // Run only on initial render
 
-//     if (loading) {
-//     return <Loading title="Checking user " />; // Use your loading component
-//   }
+  //     if (loading) {
+  //     return <Loading title="Checking user " />; // Use your loading component
+  //   }
 
   return (
     <AuthContext.Provider value={{ authState, setAuthState, login, logout }}>

@@ -10,7 +10,7 @@ export const apiClient = axios.create({
 });
 
 
-const getAccessToken = async () => {
+const getAccessToken = () => {
     try {
         return localStorage.getItem("token");
     } catch (error) {
@@ -20,7 +20,7 @@ const getAccessToken = async () => {
 }
 
 apiClient.interceptors.request.use( async (config) => {
-  const token = await getAccessToken(); // Example: Auth token
+  const token = getAccessToken(); // Example: Auth token
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

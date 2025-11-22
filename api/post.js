@@ -2,10 +2,16 @@ import apiClient from "./axiosClient";
 
 export const fetchPosts = async () => {
   try {
-    const response = await apiClient.get("/posts/all-posts", {
-      cache: "no-store",
-      next: { revalidate: 3600 },
-    });
+    const response = await apiClient.get("/posts/all-posts");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const fetchPostById = async (id) => {
+  try {
+    const response = await apiClient.get(`/posts/${id}`);
     return response.data;
   } catch (error) {
     throw error;

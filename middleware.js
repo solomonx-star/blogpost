@@ -4,9 +4,8 @@ export function middleware(request) {
   // Check if the token exists in cookies
   const token = request.cookies.get("authToken");
 
-  // Redirect to login if the token is missing
-  console.log("This is the token: ",token)
-  if (!token) {
+  // Redirect to Home if the token is missing
+  if (!token?.value) {
     return NextResponse.redirect(new URL("/Home", request.url));
   }
 

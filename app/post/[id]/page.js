@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { fetchPosts, updateViews } from "../../../api/post";
+import { fetchPostById, updateViews } from "../../../api/post";
 import { addLike, addComment } from "../../../api/likes";
 
 export default function PostPage({ params }) {
@@ -13,14 +13,29 @@ export default function PostPage({ params }) {
 
   const handleFetchPost = async () => {
     try {
-      const response = await fetchPosts();
-      if (response.data && response.statusCode === 200) {
-        const currentPost = response.data.find((p) => p._id === params.id);
-        setPost(currentPost);
-        setLikes(currentPost.likes || 0);
-        setComments(currentPost.comments || []);
-        setViews(currentPost.views || 0);
-        await updateViews(currentPost._id);
+      const response = await fetchPostById(params.id);
+
+      // response may be { data: post } or post directly depending on API helper
+      const postData = response?.data ?? response;
+
+      if (!postData) {
+        // Post not found; set fallback state
+        setPost(null);
+        setLikes(0);
+        setComments([]);
+        setViews(0);
+        return;
+      }
+
+      // Set state from the returned post
+      setPost(postData);
+      setLikes(postData.likes || 0);
+      setComments(postData.comments || []);
+      setViews(postData.views || 0);
+
+      // Only update views if we have a valid id
+      if (postData._id) {
+        await updateViews(postData._id);
       }
     } catch (error) {
       console.error("Error fetching post:", error);

@@ -30,14 +30,13 @@ export default function SignInPage() {
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        console.log("Form submitted:", values, "Remember me:", rememberMe);
 
         const response = await signin(values.email, values.password);
 
         // The API helper returns `response.data` (mock: { message: 'Login successful' }).
         // Accept either a 200 statusCode or a success message payload.
-        if (response && (response.statusCode === 200 || response.message)) {
-          console.log("Login Response: ", response);
+        if (response?.statusCode === 200 && response.user && response.token) {
+
           setSubmitStatus({
             type: "success",
             message: "Login successful! Redirecting...",
@@ -303,12 +302,12 @@ export default function SignInPage() {
                 </div>
 
                 <div className="text-sm">
-                  <a
+                  <Link
                     href="#"
                     className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium transition-colors"
                   >
                     Forgot password?
-                  </a>
+                  </Link>
                 </div>
               </div>
 

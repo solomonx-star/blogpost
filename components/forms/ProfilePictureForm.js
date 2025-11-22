@@ -15,6 +15,12 @@ export default function ProfilePictureForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!authState.user?._id) {
+      setMessage('You must be logged in to upload a profile picture.');
+      return;
+    }
+    
     if (!image) {
       setMessage('Please select an image to upload.');
       return;

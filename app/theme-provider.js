@@ -1,9 +1,18 @@
 'use client'
+
+
+import { createContext, useState, useContext } from 'react'
  
-import { createContext } from 'react'
+export const ThemeContext = createContext(null)
  
-export const ThemeContext = createContext({})
- 
-export default function ThemeProvider({ children }) {
-  return <ThemeContext.Provider value="dark">{children}</ThemeContext.Provider>
+export default function ThemeProvider({ children, defaultTheme = 'dark' }) {
+  const [theme, setTheme] = useState(defaultTheme)
+  return <ThemeContext.Provider value={{theme, setTheme}}>{children}</ThemeContext.Provider>
+}
+export function useTheme() {
+  const context = useContext(ThemeContext)
+  if (!context) {
+    throw new Error('useTheme must be used within ThemeProvider')
+  }
+  return context
 }

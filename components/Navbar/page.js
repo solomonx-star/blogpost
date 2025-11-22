@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/userContext";
 import { logoutUser } from "@/api/auth";
+import Link from "next/link";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,15 +13,19 @@ export const Navbar = () => {
   const pathname = usePathname();
   // const pathname = '/Home'; // Simulated for demo
 
-  const navItems = [
-    { name: "Home", href: "/Home" },
-    // { name: "Posts", href: "/BlogPost" },
-    { name: "About Us", href: "/About-us" },
-  ];
+const navItems = useMemo(() => {
+    const items = [
+      { name: "Home", href: "/Home" },
+      { name: "About Us", href: "/About-us" },
+    ];
 
-  if (authState.isAuthenticated) {
-    navItems.push({ name: "Posts", href: "/BlogPost" });
-  }
+    if (authState.isAuthenticated) {
+      items.splice(1, 0, { name: "Posts", href: "/BlogPost" });
+    }
+
+    return items;
+  }, [authState.isAuthenticated]);
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -33,7 +38,10 @@ export const Navbar = () => {
       if (response.statusCode === 200) {
         logout();
       }
-    } catch (error) {}
+    } catch (error) {
+       console.error("Logout failed:", error);
+       // TODO: Show user-facing error notification
+    }
   };
 
   return (
@@ -71,7 +79,7 @@ export const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
                 href={item.href}
                 className={`relative px-4 py-2 font-medium text-sm transition-all duration-200 rounded-lg group ${
@@ -86,25 +94,25 @@ export const Navbar = () => {
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-red-500 to-red-600 rounded-full"></span>
                 )}
                 <span className="absolute inset-0 rounded-lg bg-red-50 dark:bg-red-900/10 opacity-0 group-hover:opacity-100 transition-opacity -z-10"></span>
-              </a>
+              </Link>
             ))}
           </div>
 
           {/* Auth Buttons - Desktop */}
           {!authState.isAuthenticated && (
             <div className="hidden md:flex items-center gap-3">
-              <a
+              <Link
                 href="/login"
                 className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
               >
                 Sign In
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/signup"
                 className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-red-500 to-red-600 rounded-lg hover:from-red-600 hover:to-red-700 transition-all transform hover:scale-105 shadow-md"
               >
                 Get Started
-              </a>
+              </Link>
             </div>
           )}
 
@@ -169,7 +177,7 @@ export const Navbar = () => {
       >
         <div className="px-4 pt-2 pb-4 space-y-2 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.name}
               href={item.href}
               onClick={() => setIsMenuOpen(false)}
@@ -183,25 +191,41 @@ export const Navbar = () => {
                 <span className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-red-500 to-red-600"></span>
               )}
               <span className="ml-2">{item.name}</span>
-            </a>
+            </Link>
           ))}
 
           {/* Mobile Auth Buttons */}
-          <div className="pt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
-            <a
+         {!authState.isAuthenticated && (
+           <div className="pt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
+            <Link
               href="/signin"
               className="block px-4 py-3 text-center font-medium text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
             >
               Sign In
-            </a>
-            <a
+            </Link>
+            <Link
               href="/signup"
               className="block px-4 py-3 text-center font-medium text-sm text-white bg-gradient-to-r from-red-500 to-red-600 rounded-lg hover:from-red-600 hover:to-red-700 transition-all shadow-md"
             >
               Get Started
-            </a>
+            </Link>
           </div>
+         )}
+
+         {authState.isAuthenticated && (
+           <div className="pt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
+             <span className="block px-4 py-3 text-center font-medium text-sm text-gray-700 dark:text-gray-300">
+               Hello, {authState.user?.username || "User"}
+             </span>
+              <button
+                onClick={handleLogout}
+                className="w-full px-4 py-3 text-center font-medium text-sm text-white bg-gradient-to-r from-red-500 to-red-600 rounded-lg hover:from-red-600 hover:to-red-700 transition-all shadow-md"
+              >
+                Logout
+              </button>
         </div>
+         )}
+      </div>
       </div>
     </nav>
   );

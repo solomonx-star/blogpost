@@ -10,7 +10,13 @@ import { getProfile } from "@/api/auth";
 export const AuthContext = createContext();
 
 // Custom hook to use AuthContext
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
 
 // AuthProvider component to wrap around the app
 export const AuthProvider = ({ children }) => {
@@ -34,13 +40,16 @@ export const AuthProvider = ({ children }) => {
 
   // Function to handle logout
   const logout = () => {
-    setAuthState({ isAuthenticated: false, user: null, token: null, loading: false });
+    setAuthState({
+      isAuthenticated: false,
+      user: null,
+      token: null,
+      loading: false,
+    });
     Cookies.remove("authToken"); // Remove the token cookie
     Cookies.remove("_id"); // Remove the user ID cookie
     Cookies.remove("user"); // Remove the user cookie
     router.push("/login");
-
-
   };
 
   // Initialize authentication on app load
@@ -50,29 +59,18 @@ export const AuthProvider = ({ children }) => {
 
     const fetchUser = async () => {
       if (!token || !userId) {
-        console.error("No token or user ID found in cookies");
-        setAuthState({ isAuthenticated: false, user: null, token: null, loading: false });
+        setAuthState({
+          isAuthenticated: false,
+          user: null,
+          token: null,
+          loading: false,
+        });
         return;
       }
 
       try {
         // Fetch user data from backend
-        const response = await getProfile(userId);
-        console.log("User Profile: ", response);
-        setAuthState({
-          isAuthenticated: true,
-          user: response,
-          token: token,
-          loading: false,
-        });
-      } catch (err) {
-        console.error("Error fetching user:", err);
-        // Only log out if backend says unauthorized/forbidden
-        if (err.response?.status === 401 || err.response?.status === 403) {
-          logout();
-          return;
-        }
-        // Fallback: hydrate from cookie if present
+        // axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         const userCookie = Cookies.get("user");
         if (userCookie) {
           try {
@@ -88,7 +86,23 @@ export const AuthProvider = ({ children }) => {
             console.error("Failed to parse user cookie", parseErr);
           }
         }
-        setAuthState({ isAuthenticated: false, user: null, token: null, loading: false });
+      } catch (err) {
+        console.error("Error fetching user:", err);
+        // Only log out if backend says unauthorized/forbidden
+        if (err.response?.status === 401 || err.response?.status === 403) {
+          // logout();
+          return;
+        }
+        Cookies.remove("authToken"); // Remove the token cookie
+        Cookies.remove("_id"); // Remove the user ID cookie
+        Cookies.remove("user"); // Remove the user cookie
+
+        setAuthState({
+          isAuthenticated: false,
+          user: null,
+          token: null,
+          loading: false,
+        });
       }
     };
 
@@ -100,7 +114,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ authState, setAuthState, login, logout }}>
+    <AuthContext.Provider value={{ authState, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Loading } from '@/components/Loading';
 import { NavWrapper } from '@/components/NavbarWrapper/NavWrapper';
+
+
+
 
 const teamMembers = [
   {

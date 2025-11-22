@@ -45,11 +45,7 @@ export const uploadProfilePicture = async (userId, image) => {
         const formData = new FormData();
         formData.append('image', image);
 
-        const response = await axiosClient.post(`/auth/uploadProfilePicture/${userId}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const response = await axiosClient.post(`/auth/uploadProfilePicture/${userId}`, formData);
         return response.data;
     } catch (error) {
         throw error;

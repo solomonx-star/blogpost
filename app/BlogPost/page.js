@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { postData } from '../../api/post';
-import { addLike, addComment } from '../../api/likes';
 import { NavWrapper } from '@/components/NavbarWrapper/NavWrapper';
+
 
 // Validation Schema
 const validationSchema = Yup.object({
@@ -49,7 +49,7 @@ export default function BlogPost() {
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
-
+        setSubmitStatus(null);
         const response = await postData({
             title: values.title,
             content: values.content,
@@ -99,6 +99,7 @@ export default function BlogPost() {
             <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-red-500 to-red-600"></div>
             
             <div className="p-8 space-y-6">
+              <form onSubmit={formik.handleSubmit}>
               {/* Status Message */}
               {submitStatus && (
                 <div className={`p-4 rounded-lg ${
@@ -253,8 +254,7 @@ export default function BlogPost() {
               {/* Action Buttons */}
               <div className="flex gap-4 pt-4">
                 <button
-                  type="button"
-                  onClick={handleSubmit}
+                  type="submit"
                   disabled={formik.isSubmitting || !formik.isValid}
                   className="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98]"
                 >
@@ -278,8 +278,9 @@ export default function BlogPost() {
                   Clear
                 </button>
               </div>
+              </form>
             </div>
-          </div>
+            </div>
         </div>
 
         {/* Info Card */}

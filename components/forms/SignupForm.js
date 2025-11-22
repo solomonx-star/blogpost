@@ -27,7 +27,7 @@ const validationSchema = Yup.object({
     )
     .required("Password is required"),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Confirm password is required"),
 });
 
@@ -48,15 +48,13 @@ export default function SignupPage() {
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
-        console.log("Form submitted:", values);
 
-        // Replace with your actual API call:
         const response = await signup(
           values.username,
           values.email,
           values.password
         );
-        console.log("Signup Response: ", response);
+
         if (response && response.statusCode === 201) {
           
           setSubmitStatus({
@@ -64,10 +62,12 @@ export default function SignupPage() {
             message: "Account created successfully! You'll be Redirected shortly...",
           });
           resetForm();
-          setTimeout(() => {
+          const timeoutId = setTimeout(() => {
             router.push("/login");
           }, 3000);
           return;
+        } else {
+          setSubmitStatus({type: "error", message: "Signup failed. Please try again."});
         }
 
       } catch (error) {
@@ -488,7 +488,7 @@ export default function SignupPage() {
               {/* Login Link */}
               <div className="text-center">
                 <Link
-                  href="login"
+                  href="/login"
                   className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium transition-colors"
                 >
                   Sign in instead
