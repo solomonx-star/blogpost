@@ -7,63 +7,7 @@ import { Loading } from "@/components/Loading.js";
 import { useAuth } from "@/context/userContext";
 import { NavWrapper } from "@/components/NavbarWrapper/NavWrapper.js";
 
-// Mock data for demonstration
-// const mockPosts = [
-//   {
-//     _id: "1",
-//     title: "Getting Started with React 19",
-//     content:
-//       "React 19 introduces exciting new features that make building web applications even more intuitive. From improved hooks to better performance optimizations, this release is packed with improvements.",
-//     createdAt: "2025-11-15T10:00:00Z",
-//     authorName: "Sarah Johnson",
-//     category: "Development",
-//   },
-//   {
-//     _id: "2",
-//     title: "The Future of Web Design",
-//     content:
-//       "Web design is evolving rapidly with new tools and technologies. Discover the latest trends that are shaping how we build beautiful, accessible websites.",
-//     createdAt: "2025-11-12T14:30:00Z",
-//     authorName: "Michael Chen",
-//     category: "Design",
-//   },
-//   {
-//     _id: "3",
-//     title: "Mastering TypeScript",
-//     content:
-//       "TypeScript has become essential for modern web development. Learn how to leverage its powerful type system to write more maintainable code.",
-//     createdAt: "2025-11-10T09:15:00Z",
-//     authorName: "Emily Rodriguez",
-//     category: "Development",
-//   },
-//   {
-//     _id: "4",
-//     title: "Building Scalable APIs",
-//     content:
-//       "Learn best practices for designing and implementing APIs that can handle millions of requests. We cover everything from architecture to deployment.",
-//     createdAt: "2025-11-08T16:45:00Z",
-//     authorName: "David Kim",
-//     category: "Backend",
-//   },
-//   {
-//     _id: "5",
-//     title: "UX Principles That Matter",
-//     content:
-//       "Great user experience is the foundation of successful products. Explore the core principles that make interfaces intuitive and delightful to use.",
-//     createdAt: "2025-11-05T11:20:00Z",
-//     authorName: "Lisa Anderson",
-//     category: "Design",
-//   },
-//   {
-//     _id: "6",
-//     title: "Modern CSS Techniques",
-//     content:
-//       "CSS has come a long way. Discover modern techniques including container queries, cascade layers, and CSS grid that will transform your layouts.",
-//     createdAt: "2025-11-02T13:00:00Z",
-//     authorName: "James Wilson",
-//     category: "Frontend",
-//   },
-// ];
+
 
 export default function BlogHome() {
   const [posts, setPosts] = useState([]);
