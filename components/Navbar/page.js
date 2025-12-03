@@ -46,7 +46,7 @@ const navItems = useMemo(() => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 backdrop-blur-lg bg-white/80 dark:bg-gray-900/80">
+    <nav className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 backdrop-blur-lg dark:bg-gray-900/80">
       <div className=" mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo */}
@@ -69,12 +69,12 @@ const navItems = useMemo(() => {
               </div>
               <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
             </div>
-            <a
+            <Link
               href="/"
               className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent"
             >
               BlogSite
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}

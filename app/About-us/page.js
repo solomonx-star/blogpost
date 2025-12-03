@@ -92,9 +92,6 @@ export default function AboutUs() {
   const [hoveredMember, setHoveredMember] = useState(null);
   const { authState } = useAuth();
 
-  useState(() => {
-    console.log("From About us: ", authState.user?.id)
-  });
 
   return (
     <NavWrapper>

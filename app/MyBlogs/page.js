@@ -33,8 +33,6 @@ export default function MyBlogs() {
   }, []);
 
   useEffect(() => {
-    // Load posts when user changes or the authorName filter changes
-    console.log("User Id", userId);
     loadPosts();
   }, []);
 

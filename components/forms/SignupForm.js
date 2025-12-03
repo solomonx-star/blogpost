@@ -501,19 +501,19 @@ export default function SignupPage() {
         {/* Terms */}
         <p className="text-center text-sm text-gray-600 dark:text-gray-400">
           By signing up, you agree to our{" "}
-          <a
+          <Link
             href="#"
             className="text-red-600 dark:text-red-400 hover:underline"
           >
             Terms of Service
-          </a>{" "}
+          </Link>{" "}
           and{" "}
-          <a
+          <Link
             href="#"
             className="text-red-600 dark:text-red-400 hover:underline"
           >
             Privacy Policy
-          </a>
+          </Link>
         </p>
       </div>
     </div>
