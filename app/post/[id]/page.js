@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { fetchPostById, updateViews, deletePost } from "../../../api/post";
 import { addLike, addComment } from "../../../api/likes";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../context/userContext";
+import { Loading } from "@/components/Loading";
 
 export default function PostPage({ params }) {
   const { authState } = useAuth();
@@ -85,7 +86,7 @@ export default function PostPage({ params }) {
   if (!post) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        Loading...
+        <Loading />
       </div>
     );
   }
