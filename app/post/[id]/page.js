@@ -126,9 +126,7 @@ export default function PostPage({ params }) {
             {isAuthor && (
               <div className="mt-8 text-right">
                 <Link href={`/post/${post._id}/edit`}>
-                  <Link className="bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all">
                     Edit Post
-                  </Link>
                 </Link>
                 <button
                   onClick={handleDelete}
