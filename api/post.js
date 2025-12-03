@@ -1,8 +1,10 @@
-import apiClient from "./apiClient";
+import next from "next";
+import { unstable_cache } from 'next/cache';
+import apiClient from "./axiosClient";
 
 export const fetchPosts = async () => {
   try {
-    const response = await apiClient.get("/all-posts");
+    const response = await apiClient.get("/posts/all-posts");
     return response.data;
   } catch (error) {
     throw error;
@@ -11,44 +13,54 @@ export const fetchPosts = async () => {
 
 export const fetchPostById = async (id) => {
   try {
-    const response = await apiClient.get(`/${id}`);
+    const response = await apiClient.get(`/posts/${id}`);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-export const createPost = async ({ title, content }) => {
+export const postData = async (post) => {
   try {
-    const postdata = {
-      title,
-      content,
-    };
-    const response = await apiClient.post("/blog-post", postdata);
+    const response = await apiClient.post("/posts/blog-post", post);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-export const updatePost = async (id, { title, content }) => {
+export const updatePost = async (postId, post) => {
   try {
-    const postData = {
-      title,
-      content,
-    };
-    const response = await apiClient.put(`/update/${id}`, postData);
+    const response = await apiClient.put(`/posts/${postId}`, post);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-export const deletePost = async (id) => {
+export const deletePost = async (postId) => {
   try {
-    const response = await apiClient.delete(`/delete/${id}`);
+    const response = await apiClient.delete(`/posts/${postId}`);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
+
+export const updateViews = async (postId) => {
+  try {
+    const response = await apiClient.post(`/posts/${postId}/view`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAuthorPosts = async (authorId) => {
+  try {
+    const response = await apiClient.get(`/posts/author/${authorId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
