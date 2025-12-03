@@ -1,5 +1,5 @@
 "use client";
-<<<<<<< HEAD
+
 import React, { useState } from "react";
 
 // Mockup data
@@ -137,7 +137,7 @@ export default function Home() {
         </main>
     );
 }
-=======
+
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -324,4 +324,4 @@ export default function BlogHome() {
     </NavWrapper>
   );
 }
->>>>>>> test
+
