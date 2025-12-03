@@ -9,8 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.6.1",
     "axios": "^1.12.2",
-    
     "formik": "^2.4.9",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
@@ -21,8 +21,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "axios-mock-adapter": "^2.1.0",
     "@tailwindcss/postcss": "^4",
+    "axios-mock-adapter": "^2.1.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "tailwindcss": "^4"
