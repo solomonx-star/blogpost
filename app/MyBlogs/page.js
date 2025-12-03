@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { NavWrapper } from "@/components/NavbarWrapper/NavWrapper";
 import { useAuth } from "@/context/userContext";
 import { getAuthorPosts } from "@/api/post";
@@ -9,8 +9,6 @@ import Cookies from "js-cookie";
 export default function MyBlogs() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState(null);
-  const [authorName, setAuthorName] = useState("John Doe"); // Replace with actual logged-in user
   const [selectedPost, setSelectedPost] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
@@ -28,25 +26,15 @@ export default function MyBlogs() {
     "Other",
   ];
 
-  useEffect(() => {
-    setUserId(authState.user?.id || Cookies.get("id"));
-  }, [authState.user?.id]);
 
-  useEffect(() => {
-    loadPosts();
-  }, [loadPosts]);
 
-  const loadPosts = async () => {
+
+
+  const loadPosts = useCallback(async () => {
     try {
       setLoading(true);
-    //   if (!userId) {
-    //     console.warn("No userId available, skipping author posts fetch");
-    //     setPosts([]);
-    //     return;
-    //   }
-
-      const response = await getAuthorPosts(authState.user?.id );
-      console.log("Response: ", response)
+      const response = await getAuthorPosts(authState.user?.id);
+      console.log("Response: ", response);
       const postsData = response?.data ?? response;
       if (!postsData) return setPosts([]);
       setPosts(
@@ -59,7 +47,13 @@ export default function MyBlogs() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [authState.user?.id])
+
+  useEffect(() => {
+    if (authState.user?.id) {
+      loadPosts();
+    }
+  }, [loadPosts, authState.user?.id]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
