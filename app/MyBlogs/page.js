@@ -30,11 +30,11 @@ export default function MyBlogs() {
 
   useEffect(() => {
     setUserId(authState.user?.id || Cookies.get("id"));
-  }, []);
+  }, [authState.user?.id]);
 
   useEffect(() => {
     loadPosts();
-  }, []);
+  }, [loadPosts]);
 
   const loadPosts = async () => {
     try {

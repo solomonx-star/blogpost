@@ -116,7 +116,7 @@ export default function AboutUs() {
             </h1>
             
             <p className="text-xl leading-8 text-gray-600 dark:text-gray-300 mb-8">
-              We're a passionate team of innovators, designers, and developers dedicated to transforming ideas into exceptional digital experiences.
+              We&apos;re a passionate team of innovators, designers, and developers dedicated to transforming ideas into exceptional digital experiences.
             </p>
             
             <div className="flex justify-center gap-4">
@@ -162,7 +162,7 @@ export default function AboutUs() {
                 We believe in the power of technology to transform businesses and improve lives. Our mission is to create innovative digital solutions that empower organizations to reach their full potential.
               </p>
               <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-                Founded in 2015, we've grown from a small startup to a leading force in the tech industry, serving clients across the globe with cutting-edge solutions and unwavering dedication.
+                Founded in 2015, we&apos;ve grown from a small startup to a leading force in the tech industry, serving clients across the globe with cutting-edge solutions and unwavering dedication.
               </p>
               <div className="flex items-center gap-4 pt-4">
                 <div className="h-1 w-16 bg-gradient-to-r from-red-500 to-red-600 rounded-full"></div>
@@ -288,7 +288,7 @@ export default function AboutUs() {
             Ready to Work Together?
           </h2>
           <p className="text-xl text-red-100 mb-8 max-w-2xl mx-auto">
-            Let's create something amazing. Get in touch with our team today.
+            Let&apos;s create something amazing. Get in touch with our team today.
           </p>
           <button className="bg-white text-red-600 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition-all transform hover:scale-105 shadow-xl">
             Get Started

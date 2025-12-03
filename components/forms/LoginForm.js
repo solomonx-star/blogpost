@@ -427,7 +427,7 @@ export default function SignInPage() {
               {/* Sign Up Link */}
               <div className="text-center pt-2">
                 <span className="text-gray-600 dark:text-gray-400">
-                  Don't have an account?{" "}
+                  Don&apos;t have an account?{" "}
                 </span>
                 <Link
                   href="/signup"
