@@ -20,7 +20,8 @@ const navItems = useMemo(() => {
     ];
 
     if (authState.isAuthenticated) {
-      items.splice(1, 0, { name: "Posts", href: "/BlogPost" });
+      items.splice(1, 0, { name: "Create Blog", href: "/BlogPost" });
+      items.splice(2, 0, { name: "My Blogs", href: "/MyBlogs" });
     }
 
     return items;

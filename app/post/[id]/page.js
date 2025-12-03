@@ -1,15 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { fetchPostById, updateViews } from "../../../api/post";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { fetchPostById, updateViews, deletePost } from "../../../api/post";
 import { addLike, addComment } from "../../../api/likes";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function PostPage({ params }) {
+  const { authState } = useAuth();
   const [post, setPost] = useState(null);
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [views, setViews] = useState(0);
+  const router = useRouter();
 
   const handleFetchPost = async () => {
     try {
@@ -62,6 +67,15 @@ export default function PostPage({ params }) {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      await deletePost(post._id);
+      router.push("/Home");
+    } catch (error) {
+      console.error("Failed to delete post:", error);
+    }
+  };
+
   useEffect(() => {
     if (params.id) {
       handleFetchPost();
@@ -85,6 +99,8 @@ export default function PostPage({ params }) {
     });
   };
 
+  const isAuthor = authState.isAuthenticated && authState.user?._id === post.author;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
@@ -107,6 +123,21 @@ export default function PostPage({ params }) {
             <div className="prose text-white max-w-none">
               <p>{post.content}</p>
             </div>
+            {isAuthor && (
+              <div className="mt-8 text-right">
+                <Link href={`/post/${post._id}/edit`}>
+                  <a className="bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all">
+                    Edit Post
+                  </a>
+                </Link>
+                <button
+                  onClick={handleDelete}
+                  className="ml-4 bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all"
+                >
+                  Delete Post
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

@@ -22,20 +22,20 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Function to handle login
-  // Function to handle login
+
   const login = (user, token) => {
     setAuthState({ isAuthenticated: true, user, token });
 
     // Use secure: true only in production
     const cookieOptions = {
+      path: "/",
       expires: 2,
       secure: process.env.NODE_ENV === "production", // Only secure in production
       sameSite: "lax", // Add this for better compatibility
     };
 
     Cookies.set("authToken", token, cookieOptions);
-    Cookies.set("_id", user._id, cookieOptions);
+    Cookies.set("id", user.id, cookieOptions);
     Cookies.set("user", JSON.stringify(user), cookieOptions);
 
     router.push("/Home");
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     Cookies.remove("authToken", cookieOptions);
-    Cookies.remove("_id", cookieOptions);
+    Cookies.remove("id", cookieOptions);
     Cookies.remove("user", cookieOptions);
     router.push("/Home");
   };
@@ -60,28 +60,17 @@ export const AuthProvider = ({ children }) => {
   // Initialize authentication on app load
   useEffect(() => {
     const token = Cookies.get("authToken");
-    const userId = Cookies.get("_id");
+    const userId = Cookies.get("id");
+
+    console.log("ID from context: ", userId);
 
     const fetchUser = async () => {
-      if (!token || !userId) {
-        setLoading(false);
-        return;
-      }
+      // if (!token || !userId) {
+      //   setLoading(false);
+      //   return;
+      // }
 
       try {
-        // Fetch user data
-        // const response = await getProfile(userId);
-
-
-
-        // Update authentication state
-        setAuthState({
-          isAuthenticated: true,
-          user: response,
-          token: token,
-        });
-      } catch (err) {
-        console.error("Error fetching user:", err);
 
         const userCookie = Cookies.get("user");
         if (userCookie) {
@@ -96,13 +85,10 @@ export const AuthProvider = ({ children }) => {
             return;
           } catch (parseErr) {
             console.error("Failed to parse user cookie", parseErr);
+            setAuthState({ isAuthenticated: false, user: null, token: null });
           }
         }
-        setAuthState({ isAuthenticated: false, user: null, token: null });
-
-        if (err.response?.status === 401 || err.response?.status === 403) {
-          logout();
-        }
+        
       } finally {
         setLoading(false);
       }

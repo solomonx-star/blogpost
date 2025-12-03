@@ -7,13 +7,12 @@ import { Loading } from "@/components/Loading.js";
 import { useAuth } from "@/context/userContext";
 import { NavWrapper } from "@/components/NavbarWrapper/NavWrapper.js";
 
-
-
 export default function BlogHome() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const { authState } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleFetchPosts = async () => {
     try {
@@ -53,6 +52,14 @@ export default function BlogHome() {
       day: "numeric",
     });
   };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <NavWrapper>
@@ -94,15 +101,27 @@ export default function BlogHome() {
           )}
         </div>
 
+        {/* Search Bar */}
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-8">
+          <input
+            type="text"
+            placeholder="Search for posts..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:outline-none transition-all"
+          />
+        </div>
+
         {isLoading && (
           <div className="">
             <Loading />
           </div>
         )}
+
         {/* Blog Grid */}
         <div className="mx-auto max-w-9xl px-6 lg:px-8 py-16">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {posts.slice(0, 20).map((post) => (
+            {filteredPosts.slice(0, 20).map((post) => (
               <article
                 key={post._id}
                 className="group relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
@@ -113,13 +132,12 @@ export default function BlogHome() {
                 {/* Decorative top bar */}
                 <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent"></div>
-                  
-                    {post.category && (
-                      <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium">
+
+                  {post.category && (
+                    <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium">
                       {post.category}
-                      </div>
-                    )}
-                  
+                    </div>
+                  )}
                 </div>
 
                 {/* Content */}
@@ -129,7 +147,7 @@ export default function BlogHome() {
                       {formatDate(post.createdAt)}
                     </time>
                     <span>•</span>
-                    <span>{post.authorName}</span>
+                    <span>{post.user}</span>
                   </div>
 
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-2">

@@ -33,6 +33,8 @@ export default function SignInPage() {
 
         const response = await signin(values.email, values.password);
 
+        // console.log("Response data: ", response);
+
         // The API helper returns `response.data` (mock: { message: 'Login successful' }).
         // Accept either a 200 statusCode or a success message payload.
         if (response?.statusCode === 200 && response.user && response.token) {

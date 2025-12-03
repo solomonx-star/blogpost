@@ -1,3 +1,5 @@
+import next from "next";
+import { unstable_cache } from 'next/cache';
 import apiClient from "./axiosClient";
 
 export const fetchPosts = async () => {
@@ -27,6 +29,24 @@ export const postData = async (post) => {
   }
 };
 
+export const updatePost = async (postId, post) => {
+  try {
+    const response = await apiClient.put(`/posts/${postId}`, post);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deletePost = async (postId) => {
+  try {
+    const response = await apiClient.delete(`/posts/${postId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const updateViews = async (postId) => {
   try {
     const response = await apiClient.post(`/posts/${postId}/view`);
@@ -35,3 +55,12 @@ export const updateViews = async (postId) => {
     throw error;
   }
 };
+
+export const getAuthorPosts = async (authorId) => {
+  try {
+    const response = await apiClient.get(`/posts/author/${authorId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}

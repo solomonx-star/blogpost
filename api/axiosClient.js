@@ -1,5 +1,10 @@
 
 import axios from 'axios';
+import Cookies from 'js-cookie';
+
+
+// const token = Cookies.get('token');
+
 
 
 export const apiClient = axios.create({
@@ -10,22 +15,31 @@ export const apiClient = axios.create({
 });
 
 
-const getAccessToken = () => {
-    try {
-        return localStorage.getItem("token");
-    } catch (error) {
-        console.error('GET_ACCESS_TOKEN_ERROR: ', error)
-        return null
-    }
-}
+// const getAccessToken = () => {
+//     try {
+//         return Cookies.get("token");
+//     } catch (error) {
+//         console.error('GET_ACCESS_TOKEN_ERROR: ', error)
+//         return null
+//     }
+// }
 
-apiClient.interceptors.request.use( async (config) => {
-  const token = getAccessToken(); // Example: Auth token
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+
+    // Add a request interceptor to attach the token
+    apiClient.interceptors.request.use(
+        (config) => {
+            const token = Cookies.get('authToken'); // Or wherever you store your token
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+        },
+        (error) => {
+            return Promise.reject(error);
+        }
+    );
+
+    
 
 const apiMethods = {
   async get(url, params = {}) {

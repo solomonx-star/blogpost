@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { postData } from '../../api/post';
 import { NavWrapper } from '@/components/NavbarWrapper/NavWrapper';
+import { useAuth } from '@/context/userContext';
 
 
 // Validation Schema
@@ -17,10 +18,6 @@ const validationSchema = Yup.object({
     .min(50, 'Content must be at least 50 characters')
     .max(5000, 'Content must be less than 5000 characters')
     .required('Content is required'),
-  authorName: Yup.string()
-    .min(2, 'Author name must be at least 2 characters')
-    .max(50, 'Author name must be less than 50 characters')
-    .required('Author name is required'),
   category: Yup.string()
     .required('Category is required')
 });
@@ -38,12 +35,12 @@ const categories = [
 
 export default function BlogPost() {
   const [submitStatus, setSubmitStatus] = useState(null);
+  const { authState, user } = useAuth();
 
   const formik = useFormik({
     initialValues: {
       title: '',
       content: '',
-      authorName: '',
       category: ''
     },
     validationSchema: validationSchema,
@@ -53,9 +50,12 @@ export default function BlogPost() {
         const response = await postData({
             title: values.title,
             content: values.content,
-            authorName: values.authorName,
-            category: values.category
+            category: values.category,
         });
+
+        if (response.statusCode !== 201) {
+          setSubmitStatus({ type: 'Failure', message: 'Blog post not create' });
+        }
         
         console.log('Form submitted:', response);
     
@@ -151,68 +151,36 @@ export default function BlogPost() {
                 )}
               </div>
 
-              {/* Author Name & Category Row */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Author Name Field */}
-                <div>
-                  <label htmlFor="authorName" className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                    Author Name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="authorName"
-                    name="authorName"
-                    type="text"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.authorName}
-                    placeholder="Your name"
-                    className={`w-full px-4 py-3 rounded-lg border ${
-                      formik.touched.authorName && formik.errors.authorName
-                        ? 'border-red-500 focus:ring-red-500'
-                        : 'border-gray-300 dark:border-gray-600 focus:ring-red-500'
-                    } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:outline-none transition-all`}
-                  />
-                  {formik.touched.authorName && formik.errors.authorName && (
-                    <p className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                      </svg>
-                      {formik.errors.authorName}
-                    </p>
-                  )}
-                </div>
-
-                {/* Category Field */}
-                <div>
-                  <label htmlFor="category" className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                    Category <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    id="category"
-                    name="category"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.category}
-                    className={`w-full px-4 py-3 rounded-lg border ${
-                      formik.touched.category && formik.errors.category
-                        ? 'border-red-500 focus:ring-red-500'
-                        : 'border-gray-300 dark:border-gray-600 focus:ring-red-500'
-                    } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:outline-none transition-all`}
-                  >
-                    <option value="">Select a category</option>
-                    {categories.map(cat => (
-                      <option key={cat} value={cat}>{cat}</option>
-                    ))}
-                  </select>
-                  {formik.touched.category && formik.errors.category && (
-                    <p className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                      </svg>
-                      {formik.errors.category}
-                    </p>
-                  )}
-                </div>
+              {/* Category Field */}
+              <div>
+                <label htmlFor="category" className="block flex-1 text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                  Category <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="category"
+                  name="category"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.category}
+                  className={`w-full px-4 py-3 rounded-lg border ${
+                    formik.touched.category && formik.errors.category
+                      ? 'border-red-500 focus:ring-red-500'
+                      : 'border-gray-300 dark:border-gray-600 focus:ring-red-500'
+                  } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:outline-none transition-all`}
+                >
+                  <option value="">Select a category</option>
+                  {categories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+                {formik.touched.category && formik.errors.category && (
+                  <p className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                    {formik.errors.category}
+                  </p>
+                )}
               </div>
 
               {/* Content Field */}

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+
 export function middleware(request) {
   // Check if the token exists in cookies
   const token = request.cookies.get("authToken");
@@ -16,6 +17,6 @@ export function middleware(request) {
 // Apply middleware only to protected routes
 export const config = {
 
-  matcher: ["/BlogPost"], // Adjust paths as needed
+  matcher: ["/BlogPost", "/MyBlogs"], // Adjust paths as needed
 
 };
