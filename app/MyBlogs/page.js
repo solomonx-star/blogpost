@@ -34,7 +34,6 @@ export default function MyBlogs() {
     try {
       setLoading(true);
       const response = await getAuthorPosts(authState.user?.id);
-      console.log("Response: ", response);
       const postsData = response?.data ?? response;
       if (!postsData) return setPosts([]);
       setPosts(

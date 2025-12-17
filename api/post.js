@@ -21,33 +21,15 @@ export const fetchPostById = async (id) => {
 };
 
 export const post = async (postData) => {
-  // const formData = new FormData();
-  // formData.append("title", postData.title);
-  // formData.append("content", postData.content);
-  // formData.append("category", postData.category);
 
-  // if (postData.blogPhoto) {
-  //   formData.append("blogPhoto", postData.blogPhoto);
-  // }
 
   try {
-    console.log("Sending request to:", apiClient.defaults.baseURL + "/posts/blog-post");
-    console.log("Request data:", {
-      title: postData.title,
-      content: postData.content,
-      category: postData.category,
-      hasPhoto: !!postData.blogPhoto
-    });
 
-    // Send formData (not postData)
     const response = await apiClient.post("/posts/blog-post", postData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-
-    console.log("Response:", response.data);
-    return response.data;
 
   } catch (error) {
     console.error("Post creation error details:", {
