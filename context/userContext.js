@@ -22,19 +22,19 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-
   const login = (user, token) => {
     setAuthState({ isAuthenticated: true, user, token });
 
     // Use secure: true only in production
     const cookieOptions = {
       path: "/",
-      expires: 2,
-      secure: process.env.NODE_ENV === "production", // Only secure in production
-      sameSite: "lax", // Add this for better compatibility
+      expires: 7, // Changed from 2 to 7 days for better UX
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
     };
 
-    Cookies.set("authToken", token, cookieOptions);
+    // BUG FIX 1: Use 'token' instead of 'authToken' to match what you're reading
+    Cookies.set("token", token, cookieOptions);
     Cookies.set("id", user.id, cookieOptions);
     Cookies.set("user", JSON.stringify(user), cookieOptions);
 
@@ -51,28 +51,34 @@ export const AuthProvider = ({ children }) => {
       sameSite: "lax",
     };
 
-    Cookies.remove("authToken", cookieOptions);
+    // BUG FIX 2: Remove 'token' instead of 'authToken'
+    Cookies.remove("token", cookieOptions);
     Cookies.remove("id", cookieOptions);
     Cookies.remove("user", cookieOptions);
+
     router.push("/Home");
   };
 
   // Initialize authentication on app load
   useEffect(() => {
-    const token = Cookies.get("authToken");
-    const userId = Cookies.get("id");
-
-    console.log("ID from context: ", userId);
-
-    const fetchUser = async () => {
-      // if (!token || !userId) {
-      //   setLoading(false);
-      //   return;
-      // }
-
+    const initAuth = async () => {
       try {
-
+        // BUG FIX 3: Read 'token' instead of 'authToken'
+        const token = Cookies.get("token");
+        const userId = Cookies.get("id");
         const userCookie = Cookies.get("user");
+
+        console.log("Token from cookie:", token);
+        console.log("ID from cookie:", userId);
+
+        // If no token, user is not authenticated
+        if (!token) {
+          setAuthState({ isAuthenticated: false, user: null, token: null });
+          setLoading(false);
+          return;
+        }
+
+        // Try to parse user from cookie
         if (userCookie) {
           try {
             const user = JSON.parse(userCookie);
@@ -80,30 +86,62 @@ export const AuthProvider = ({ children }) => {
               isAuthenticated: true,
               user,
               token,
-              loading: false,
             });
+            setLoading(false);
             return;
           } catch (parseErr) {
-            console.error("Failed to parse user cookie", parseErr);
-            setAuthState({ isAuthenticated: false, user: null, token: null });
+            console.error("Failed to parse user cookie:", parseErr);
           }
         }
-        
+
+        // BUG FIX 4: If user cookie is missing but token exists, fetch from API
+        if (token && !userCookie) {
+          try {
+            const userData = await getProfile();
+            if (userData && userData.data) {
+              const user = userData.data;
+
+              // Save user to cookie for future use
+              Cookies.set("user", JSON.stringify(user), {
+                path: "/",
+                expires: 7,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+              });
+
+              setAuthState({
+                isAuthenticated: true,
+                user,
+                token,
+              });
+            } else {
+              // Token is invalid, clear everything
+              logout();
+            }
+          } catch (error) {
+            console.error("Failed to fetch user profile:", error);
+            // Token might be expired or invalid
+            logout();
+          }
+        }
+      } catch (error) {
+        console.error("Auth initialization error:", error);
+        setAuthState({ isAuthenticated: false, user: null, token: null });
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUser();
-
+    initAuth();
   }, []); // Run only on initial render
 
-  //     if (loading) {
-  //     return <Loading title="Checking user " />; // Use your loading component
-  //   }
+  // BUG FIX 5: Show loading component while checking auth
+  if (loading) {
+    return <Loading title="Checking authentication..." />;
+  }
 
   return (
-    <AuthContext.Provider value={{ authState, login, logout }}>
+    <AuthContext.Provider value={{ authState, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

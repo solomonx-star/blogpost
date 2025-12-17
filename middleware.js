@@ -17,6 +17,6 @@ export function middleware(request) {
 // Apply middleware only to protected routes
 export const config = {
 
-  matcher: ["/BlogPost", "/MyBlogs"], // Adjust paths as needed
+  matcher: ["/MyBlogs"], // Adjust paths as needed
 
 };

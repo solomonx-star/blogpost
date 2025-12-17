@@ -28,7 +28,7 @@ export const Loading = ({ title }) => {
             />
           </svg>
           <p className="text-gray-600 dark:text-gray-400">
-            Loading your posts...
+            Loading all blog posts...
           </p>
         </div>
       </div>

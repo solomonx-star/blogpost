@@ -1,5 +1,5 @@
 import next from "next";
-import { unstable_cache } from 'next/cache';
+import { unstable_cache } from "next/cache";
 import apiClient from "./axiosClient";
 
 export const fetchPosts = async () => {
@@ -20,14 +20,51 @@ export const fetchPostById = async (id) => {
   }
 };
 
-export const postData = async (post) => {
+export const post = async (postData) => {
+  // const formData = new FormData();
+  // formData.append("title", postData.title);
+  // formData.append("content", postData.content);
+  // formData.append("category", postData.category);
+
+  // if (postData.blogPhoto) {
+  //   formData.append("blogPhoto", postData.blogPhoto);
+  // }
+
   try {
-    const response = await apiClient.post("/posts/blog-post", post);
+    console.log("Sending request to:", apiClient.defaults.baseURL + "/posts/blog-post");
+    console.log("Request data:", {
+      title: postData.title,
+      content: postData.content,
+      category: postData.category,
+      hasPhoto: !!postData.blogPhoto
+    });
+
+    // Send formData (not postData)
+    const response = await apiClient.post("/posts/blog-post", postData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    console.log("Response:", response.data);
     return response.data;
+
   } catch (error) {
+    console.error("Post creation error details:", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+      url: error.config?.url
+    });
+
+    if (error.response?.headers['content-type']?.includes('text/html')) {
+      throw new Error('Server returned HTML instead of JSON. Check your API endpoint URL and ensure backend is running.');
+    }
+
     throw error;
   }
 };
+
 
 export const updatePost = async (postId, post) => {
   try {
@@ -63,4 +100,4 @@ export const getAuthorPosts = async (authorId) => {
   } catch (error) {
     throw error;
   }
-}
+};
