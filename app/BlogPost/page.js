@@ -68,7 +68,11 @@ export default function BlogPost() {
 
         const response = await post(formData);
 
-        if (response.statusCode === 201 || response.status === "Success") {
+        console.log("Response for statusCode for upload with image", response);
+
+        if (!response) return console.log("Response did not come");
+
+        if (response?.statusCode === 201 || response.status === "Success") {
           setSubmitStatus({
             type: "success",
             message: "Blog post created successfully!",
@@ -79,6 +83,8 @@ export default function BlogPost() {
           // Reset file input
           const fileInput = document.getElementById("blogPhoto");
           if (fileInput) fileInput.value = "";
+        } else {
+          setSubmitStatus({ type: "error", message: response.error})
         }
       } catch (error) {
         console.error("Error:", error);

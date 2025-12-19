@@ -31,6 +31,8 @@ export const post = async (postData) => {
       },
     });
 
+    return response.data;
+
   } catch (error) {
     console.error("Post creation error details:", {
       message: error.message,
