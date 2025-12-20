@@ -199,7 +199,7 @@ const navItems = useMemo(() => {
          {!authState.isAuthenticated && (
            <div className="pt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
             <Link
-              href="/signin"
+              href="/login"
               className="block px-4 py-3 text-center font-medium text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
             >
               Sign In

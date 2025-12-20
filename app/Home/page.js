@@ -190,7 +190,7 @@ export default function BlogHome() {
                     className="hover-lift mb-24 lg:mb-32 cursor-pointer group"
                     style={{ animationDelay: '0.1s' }}
                   >
-                    <div className="grid lg:grid-cols-12 gap-12 items-center">
+                    <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                       <div className="lg:col-span-7 order-2 lg:order-1">
                         <div className="flex items-center gap-4 mb-6">
                           {filteredPosts[0].category && (
@@ -203,18 +203,18 @@ export default function BlogHome() {
                           </span>
                         </div>
                         
-                        <h2 className="blog-title text-5xl lg:text-7xl font-black text-neutral-950 dark:text-neutral-50 mb-6 leading-tight group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors">
+                        <h2 className="blog-title text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black text-neutral-950 dark:text-neutral-50 mb-4 lg:mb-6 leading-tight group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors">
                           {filteredPosts[0].title}
                         </h2>
                         
-                        <p className="text-xl lg:text-2xl text-neutral-600 dark:text-neutral-400 mb-8 leading-relaxed line-clamp-3">
+                        <p className="text-base sm:text-lg lg:text-2xl text-neutral-600 dark:text-neutral-400 mb-6 lg:mb-8 leading-relaxed line-clamp-3">
                           {filteredPosts[0].content}
                         </p>
                         
-                        <div className="flex items-center gap-3 text-red-600 dark:text-red-500 font-semibold text-lg group">
+                        <div className="flex items-center gap-3 text-red-600 dark:text-red-500 font-semibold text-base lg:text-lg group">
                           <span>Continue Reading</span>
                           <svg 
-                            className="w-6 h-6 group-hover:translate-x-2 transition-transform" 
+                            className="w-5 h-5 lg:w-6 lg:h-6 group-hover:translate-x-2 transition-transform" 
                             fill="none" 
                             viewBox="0 0 24 24" 
                             stroke="currentColor"
@@ -225,11 +225,13 @@ export default function BlogHome() {
                       </div>
                       
                       <div className="lg:col-span-5 order-1 lg:order-2">
-                        <div className="aspect-[4/5] relative overflow-hidden bg-neutral-100 dark:bg-neutral-900">
+                        <div className="aspect-[16/9] sm:aspect-[4/3] lg:aspect-[4/5] relative overflow-hidden bg-neutral-100 dark:bg-neutral-900">
                           <Image
                             src={filteredPosts[0]?.blogPhoto}
                             alt={filteredPosts[0].title}
                             fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
+                            priority
                             className="object-cover group-hover:scale-105 transition-transform duration-700"
                           />
                         </div>
@@ -239,10 +241,10 @@ export default function BlogHome() {
                 </Link>
 
                 {/* Divider */}
-                <div className="h-px bg-neutral-200 dark:bg-neutral-800 mb-24"></div>
+                <div className="h-px bg-neutral-200 dark:bg-neutral-800 mb-16 lg:mb-24"></div>
 
                 {/* Regular Articles Grid */}
-                <div className="grid lg:grid-cols-3 gap-x-12 gap-y-20">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 lg:gap-x-12 gap-y-12 lg:gap-y-20">
                   {filteredPosts.slice(1, 20).map((post, index) => (
                     <Link key={post._id} href={`/post/${post._id}`}>
                       <article 
@@ -250,23 +252,24 @@ export default function BlogHome() {
                         style={{ animationDelay: `${(index + 2) * 0.1}s` }}
                       >
                         {/* Image */}
-                        <div className="aspect-[3/4] relative overflow-hidden bg-neutral-100 dark:bg-neutral-900 mb-6">
+                        <div className="aspect-[4/3] sm:aspect-[3/4] relative overflow-hidden bg-neutral-100 dark:bg-neutral-900 mb-4 lg:mb-6">
                           <Image
                             src={post?.blogPhoto}
                             alt={post.title}
                             fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                             className="object-cover group-hover:scale-105 transition-transform duration-700"
                           />
                           
                           {post.category && (
-                            <div className="absolute top-4 left-4 category-pill px-3 py-1.5 text-xs uppercase tracking-wider text-red-700 dark:text-red-400 font-semibold">
+                            <div className="absolute top-3 left-3 lg:top-4 lg:left-4 category-pill px-2.5 py-1 lg:px-3 lg:py-1.5 text-xs uppercase tracking-wider text-red-700 dark:text-red-400 font-semibold">
                               {post.category}
                             </div>
                           )}
                         </div>
 
                         {/* Meta */}
-                        <div className="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+                        <div className="flex items-center gap-2 lg:gap-3 text-xs lg:text-sm text-neutral-500 dark:text-neutral-400 mb-3 lg:mb-4">
                           <time dateTime={post.createdAt}>
                             {formatDate(post.createdAt)}
                           </time>
@@ -275,20 +278,20 @@ export default function BlogHome() {
                         </div>
 
                         {/* Title */}
-                        <h3 className="blog-title text-2xl lg:text-3xl font-bold text-neutral-950 dark:text-neutral-50 mb-4 leading-tight group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors line-clamp-2">
+                        <h3 className="blog-title text-xl sm:text-2xl lg:text-3xl font-bold text-neutral-950 dark:text-neutral-50 mb-3 lg:mb-4 leading-tight group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors line-clamp-2">
                           {post.title}
                         </h3>
 
                         {/* Excerpt */}
-                        <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed line-clamp-3 mb-4">
+                        <p className="text-sm lg:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed line-clamp-3 mb-3 lg:mb-4">
                           {post.content}
                         </p>
 
                         {/* Read More */}
-                        <div className="flex items-center gap-2 text-red-600 dark:text-red-500 font-semibold text-sm">
+                        <div className="flex items-center gap-2 text-red-600 dark:text-red-500 font-semibold text-xs lg:text-sm">
                           <span>Read Article</span>
                           <svg 
-                            className="w-4 h-4 group-hover:translate-x-1 transition-transform" 
+                            className="w-3.5 h-3.5 lg:w-4 lg:h-4 group-hover:translate-x-1 transition-transform" 
                             fill="none" 
                             viewBox="0 0 24 24" 
                             stroke="currentColor"
@@ -305,7 +308,7 @@ export default function BlogHome() {
 
             {filteredPosts.length === 0 && !isLoading && (
               <div className="text-center py-24">
-                <p className="text-2xl text-neutral-400 dark:text-neutral-600 font-light">
+                <p className="text-xl lg:text-2xl text-neutral-400 dark:text-neutral-600 font-light">
                   No articles found matching your search.
                 </p>
               </div>
