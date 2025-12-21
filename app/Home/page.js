@@ -7,6 +7,7 @@ import { Loading } from "@/components/Loading.js";
 import { useAuth } from "@/context/userContext";
 import { NavWrapper } from "@/components/NavbarWrapper/NavWrapper.js";
 import Image from "next/image";
+import Snowfall from "react-snowfall"
 
 export default function BlogHome() {
   const [posts, setPosts] = useState([]);
@@ -20,9 +21,9 @@ export default function BlogHome() {
       setError(null);
       setIsLoading(true);
       const response = await fetchPosts();
-      console.log("Response Data: ", response);
+      // console.log("Response Data: ", response);
       if (response.data && response.statusCode === 200) {
-        console.log("Fetched Posts: ", response);
+        // console.log("Fetched Posts: ", response);
         setPosts(response.data);
       } else {
         setError("Failed to load posts. Please try again later");
@@ -63,6 +64,7 @@ export default function BlogHome() {
   return (
     <NavWrapper>
       <div className="min-h-screen bg-white dark:bg-neutral-950">
+        <Snowfall color="#f0f9ff" />
         <style jsx global>{`
           @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Work+Sans:wght@300;400;500;600&display=swap');
           
@@ -130,7 +132,7 @@ export default function BlogHome() {
               </div>
               
               <h1 className="blog-title text-6xl lg:text-8xl font-black text-neutral-950 dark:text-neutral-50 mb-6 leading-[0.95] tracking-tight">
-                The Blog
+                The TechBlog
               </h1>
               
               <p className="text-xl lg:text-2xl text-neutral-600 dark:text-neutral-400 font-light max-w-2xl leading-relaxed">
